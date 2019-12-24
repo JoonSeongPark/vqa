@@ -7,7 +7,9 @@ import { createAppContainer } from "react-navigation";
 import OpeningScreen from "../screens/OpeningScreen";
 import HomeScreen from "../screens/HomeScreen";
 import ResultScreen from "../screens/ResultScreen";
-import { Platform } from "@unimodules/core";
+
+import {fromRight} from 'react-navigation-transitions'
+
 import Colors from "../constants/Colors";
 
 const VqaNaviator = createStackNavigator(
@@ -25,10 +27,9 @@ const VqaNaviator = createStackNavigator(
   {
     transitionConfig: () => fromRight(),
     defaultNavigationOptions: {
-      headerTitle: <Text>This is Title</Text>,
       headerStyle: {
         elevation: 0,
-        backgroundColor: Platform.OS === "android" ? Colors.mainColor : ""
+        backgroundColor: Platform.OS === "android" ? Colors.mainColor : "white"
       },
       headerTintColor: Platform.OS === "android" ? "white" : Colors.mainColor
     }
