@@ -9,18 +9,23 @@ import {
   ActivityIndicator,
   Platform,
   PixelRatio,
-  Dimensions
+  Dimensions,
+  Button,
+  Linking
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
+import Icon from "react-native-vector-icons/Ionicons";
 
 import DefaultText from "../components/DefaultText";
-import SampleGridTile from "../components/SampleGridTile";
 import Colors from "../constants/Colors";
 import ImgPicker from "../components/ImgPicker";
 
 import * as imageActions from "../store/actions/image";
 import * as photoActions from "../store/actions/photo";
 import SampleImages from "../components/SampleImages";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import Splitter from "../components/Splitter";
+import Credits from "../components/Credits";
 
 var defaultHeaderFontSize = 28;
 var defaultTitleFontSize = 30;
@@ -58,47 +63,17 @@ const HomeScreen = props => {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(imageActions.fetchImages());
-  // }, [dispatch]);
-
   const imageTakenHandler = imagePath => {
     setSelectedImage(imagePath);
     dispatch(photoActions.addImage(selectedImage));
   };
 
-  // const dispatch = useDispatch();
+  const imageResetHandler = () => {
+    setSelectedImage("");
+    dispatch(photoActions.addImage(selectedImage));
+  };
 
-  // useEffect(() => {
-  //   dispatch(testActions.fetchImages());
-  // }, [dispatch]);
 
-  // const loadedSamples = [];
-  // useEffect(() => {
-  //   fetch("http://35.229.162.86:5000/get_image_pathes")
-  //     .then(response => response.json())
-  //     .then(responseJson => {
-  //       return responseJson.image_pathes;
-  //     })
-  //     .then(samples => {
-  //       setSampleList(samples);
-  //       setLoading(false);
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //     });
-  // }, []);
-
-  // if (loading) {
-  // } else {
-  //   for (const key in sampleList) {
-  //     loadedSamples.push(
-  //       new Images(new Date().toString() + key, sampleList[key])
-  //     );
-  //   }
-  //   dispatch(sampleActions.addSamples(loadedSamples.id, loadedSamples.imageUrl))
-  //   console.log(loadedSamples);
-  // }
 
   return (
     <ScrollView>
@@ -112,6 +87,9 @@ const HomeScreen = props => {
             : 이미지에 대해 자연어로 묻고, 답을 얻어내는 모델
           </DefaultText>
         </View>
+
+        <Splitter />
+
         <View style={styles.section}>
           <DefaultText style={styles.sectionTitle}>
             VQA on Sample Images
@@ -131,13 +109,35 @@ const HomeScreen = props => {
             />
           )}
         </View>
+
+        <Splitter />
+
         <View style={styles.section}>
-          <DefaultText style={styles.sectionTitle}>VQA on Your Own</DefaultText>
-          <DefaultText style={styles.sectionExplanation}>
-            : VQA를 적용할 이미지를 업로드하세요.
-          </DefaultText>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "flex-end"
+            }}
+          >
+            <View>
+              <DefaultText style={styles.sectionTitle}>
+                VQA on Your Own
+              </DefaultText>
+              <DefaultText style={styles.sectionExplanation}>
+                : VQA를 적용할 이미지를 업로드하세요.
+              </DefaultText>
+            </View>
+            <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={imageResetHandler}
+            >
+              <Icon name="ios-refresh" size={24} />
+            </TouchableOpacity>
+          </View>
           <ImgPicker
             onImageTaken={imageTakenHandler}
+            selectedImage={selectedImage}
             onSelect={() => {
               props.navigation.navigate({
                 routeName: "Result",
@@ -148,6 +148,11 @@ const HomeScreen = props => {
             }}
           />
         </View>
+
+        <Splitter />
+
+        <Credits />
+        
       </View>
     </ScrollView>
   );
@@ -174,10 +179,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15
   },
   header: {
-    paddingVertical: 10,
-    alignItems: "center",
-    borderBottomColor: "#ccc",
-    borderBottomWidth: 0.5
+    alignItems: "center"
   },
   logoImage: {
     height: Dimensions.get("window").height * 0.08,
@@ -186,19 +188,13 @@ const styles = StyleSheet.create({
   },
   headExplanation: {
     fontSize: defaultExplainFontSize,
-    color: "gray",
-    paddingBottom: Dimensions.get("window").height * 0.002
-  },
-  section: {
-    paddingVertical: 10,
-    borderBottomColor: "#ccc",
-    borderBottomWidth: 0.5
+    color: "gray"
+    // paddingBottom: Dimensions.get("window").height * 0.002
   },
   sectionTitle: {
     paddingTop: 3,
     paddingHorizontal: 10,
-    fontSize: defaultTitleFontSize,
-    fontWeight: "bold"
+    fontSize: defaultTitleFontSize
   },
   sectionExplanation: {
     paddingHorizontal: 15,
@@ -219,6 +215,10 @@ const styles = StyleSheet.create({
     aspectRatio: 1 / 1,
     justifyContent: "center",
     alignItems: "center"
+  },
+  iconContainer: {
+    alignItems: "center",
+    padding: 12
   }
 });
 
