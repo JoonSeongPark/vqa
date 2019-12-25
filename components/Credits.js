@@ -75,9 +75,9 @@ const Credits = props => {
             ...styles.sectionExplanation,
             ...{ color: "blue", paddingHorizontal: 0 }
           }}
-          onPress={() => githubLinkHandler("jw")}
+          onPress={() => githubLinkHandler("14ryu")}
         >
-          @jw
+          @14ryu
         </DefaultText>
       </View>
       <DefaultText style={styles.sectionExplanation}>
