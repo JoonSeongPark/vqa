@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
 line: {
   borderColor: '#ccc',
   borderBottomWidth: 0.5,
-  marginVertical: 7
+  marginVertical: 15
 }
 })
 
