@@ -17,8 +17,7 @@ if (PixelRatio.get() === 3) {
 }
 
 const Credits = props => {
-
-  const githubLinkHandler = (username) => {
+  const githubLinkHandler = username => {
     Linking.openURL("http://github.com/" + username).catch(err =>
       console.error("Cannot load page", err)
     );
@@ -38,11 +37,9 @@ const Credits = props => {
         <DefaultText
           style={{
             ...styles.sectionExplanation,
-            ...{ color: "blue", paddingHorizontal: 0}
+            ...{ color: "blue", paddingHorizontal: 0 }
           }}
-          onPress={() => 
-            githubLinkHandler("JoonSeongPark")
-          }
+          onPress={() => githubLinkHandler("JoonSeongPark")}
         >
           @JoonSeongPark
         </DefaultText>
