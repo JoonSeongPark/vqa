@@ -152,7 +152,6 @@ const HomeScreen = props => {
         <Splitter />
 
         <Credits />
-        
       </View>
     </ScrollView>
   );
