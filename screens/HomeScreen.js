@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {
   View,
-  FlatList,
   ScrollView,
   Image,
-  Text,
   StyleSheet,
   ActivityIndicator,
   Platform,
   PixelRatio,
-  Dimensions,
-  Button,
-  Linking
+  Dimensions
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -20,27 +16,28 @@ import DefaultText from "../components/DefaultText";
 import Colors from "../constants/Colors";
 import ImgPicker from "../components/ImgPicker";
 
-import * as imageActions from "../store/actions/image";
-import * as photoActions from "../store/actions/photo";
 import SampleImages from "../components/SampleImages";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Splitter from "../components/Splitter";
 import Credits from "../components/Credits";
 
-var defaultHeaderFontSize = 28;
+import * as imageActions from '../store/actions/image'
+import * as photoActions from "../store/actions/photo";
+
+var defaultHeaderFontSize = 24;
 var defaultTitleFontSize = 30;
 var defaultExplainFontSize = 16;
 
 if (PixelRatio.get() === 3) {
-  defaultHeaderFontSize = 25;
+  defaultHeaderFontSize = 22;
   defaultTitleFontSize = 26;
   defaultExplainFontSize = 14;
 } else if (PixelRatio.get() === 2) {
-  defaultHeaderFontSize = 22;
+  defaultHeaderFontSize = 20;
   defaultTitleFontSize = 22;
   defaultExplainFontSize = 12;
 } else if (PixelRatio.get() < 2) {
-  defaultHeaderFontSize = 19;
+  defaultHeaderFontSize = 18;
   defaultTitleFontSize = 18;
   defaultExplainFontSize = 10;
 }
@@ -50,15 +47,17 @@ const HomeScreen = props => {
   const [selectedImage, setSelectedImage] = useState("");
 
   const images = useSelector(state => state.image.images);
+
   const [sampleImages, setSampleImages] = useState([]);
+
   useEffect(() => {
     setSampleImages(images);
-  }, []);
+  }, [images]);
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 3000);
+    }, 2500);
   }, [setTimeout, setLoading]);
 
   const dispatch = useDispatch();
@@ -66,14 +65,20 @@ const HomeScreen = props => {
   const imageTakenHandler = imagePath => {
     setSelectedImage(imagePath);
     dispatch(photoActions.addImage(selectedImage));
+
   };
 
+  const sampleRefreshHandler = () => {
+    dispatch(imageActions.fetchImages());
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false);
+    }, 2500);
+  };
   const imageResetHandler = () => {
     setSelectedImage("");
     dispatch(photoActions.addImage(selectedImage));
   };
-
-
 
   return (
     <ScrollView>
@@ -81,8 +86,17 @@ const HomeScreen = props => {
         <View style={styles.header}>
           <Image
             style={styles.logoImage}
-            source={require("../assets/images/vqa_title_blue.png")}
+            source={require("../assets/images/vqa_logo_image.png")}
           />
+          <DefaultText
+            style={{
+              paddingBottom: 10,
+              fontSize: defaultTitleFontSize,
+              color: Colors.blueColor
+            }}
+          >
+            VQA
+          </DefaultText>
           <DefaultText style={styles.headExplanation}>
             : 이미지에 대해 자연어로 묻고, 답을 얻어내는 모델
           </DefaultText>
@@ -91,15 +105,31 @@ const HomeScreen = props => {
         <Splitter />
 
         <View style={styles.section}>
-          <DefaultText style={styles.sectionTitle}>
-            VQA on Sample Images
-          </DefaultText>
-          <DefaultText style={styles.sectionExplanation}>
-            : VQA를 적용할 이미지를 선택하세요.
-          </DefaultText>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "flex-end"
+            }}
+          >
+            <View>
+              <DefaultText style={styles.sectionTitle}>
+                VQA on Sample Images
+              </DefaultText>
+              <DefaultText style={styles.sectionExplanation}>
+                : VQA를 적용할 이미지를 선택하세요.
+              </DefaultText>
+            </View>
+            <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={sampleRefreshHandler}
+            >
+              <Icon name="ios-refresh" size={24} />
+            </TouchableOpacity>
+          </View>
           {loading && (
             <View style={styles.actIndicator}>
-              <ActivityIndicator size="large" color={Colors.mainColor} />
+              <ActivityIndicator size="large" color={Colors.blueColor} />
             </View>
           )}
           {!loading && (
@@ -160,8 +190,10 @@ const HomeScreen = props => {
 HomeScreen.navigationOptions = navData => {
   return {
     headerTitle: (
-      <View style={{ flexDirection: "row", alignItems: "baseline" }}>
-        <DefaultText style={styles.topHeader}>Model </DefaultText>
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <DefaultText style={styles.topHeader}>
+          Visual Question Answering
+        </DefaultText>
       </View>
     )
   };
@@ -171,7 +203,7 @@ const styles = StyleSheet.create({
     color: Platform.OS === "android" ? "white" : Colors.mainColor,
     fontSize: defaultHeaderFontSize,
     fontWeight: "300",
-    paddingLeft: Platform.OS === "android" ? 20 : 0
+    paddingLeft: Platform.OS === "android" ? 15 : 0
   },
   screen: {
     flex: 1,
@@ -181,9 +213,11 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   logoImage: {
-    height: Dimensions.get("window").height * 0.08,
+    height: Dimensions.get("window").height * 0.15,
     width: Dimensions.get("window").width * 0.75,
-    resizeMode: "contain"
+    resizeMode: "contain",
+    marginTop: 15,
+    marginBottom: 5
   },
   headExplanation: {
     fontSize: defaultExplainFontSize,
