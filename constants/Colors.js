@@ -1,3 +1,4 @@
 export default {
-  mainColor: '#4169e1'
+  mainColor: '#3b3838',
+  blueColor: '#5391d3'
 }
