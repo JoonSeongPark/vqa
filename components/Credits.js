@@ -29,7 +29,7 @@ const Credits = props => {
         <DefaultText
           style={{
             ...styles.sectionExplanation,
-            ...{ paddingHorizontal: 0, paddingLeft: 15 }
+            ...{ paddingHorizontal: 0, paddingLeft: 7 }
           }}
         >
           Built by{" "}
@@ -37,7 +37,7 @@ const Credits = props => {
         <DefaultText
           style={{
             ...styles.sectionExplanation,
-            ...{ color: "blue", paddingHorizontal: 0 }
+            ...{ color: "royalblue", paddingHorizontal: 0 }
           }}
           onPress={() => githubLinkHandler("JoonSeongPark")}
         >
@@ -55,7 +55,7 @@ const Credits = props => {
         <DefaultText
           style={{
             ...styles.sectionExplanation,
-            ...{ color: "blue", paddingHorizontal: 0 }
+            ...{ color: "royalblue", paddingHorizontal: 0 }
           }}
           onPress={() => githubLinkHandler("om00839")}
         >
@@ -73,7 +73,7 @@ const Credits = props => {
         <DefaultText
           style={{
             ...styles.sectionExplanation,
-            ...{ color: "blue", paddingHorizontal: 0 }
+            ...{ color: "royalblue", paddingHorizontal: 0 }
           }}
           onPress={() => githubLinkHandler("14ryu")}
         >
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     fontSize: defaultTitleFontSize
   },
   sectionExplanation: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 7,
     paddingVertical: 5,
     color: "gray",
     fontSize: defaultExplainFontSize
