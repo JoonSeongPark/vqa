@@ -8,13 +8,27 @@ import {
   Alert,
   Platform,
   TouchableNativeFeedback,
-  TouchableOpacity
+  TouchableOpacity,
+  PixelRatio
 } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 
 import Colors from "../constants/Colors";
 import DefaultText from "./DefaultText";
+
+var defaultIconSize = Dimensions.get('window').width*0.16;
+var defaultIconTextSize = 20;
+
+if (PixelRatio.get() === 3) {
+  defaultIconTextSize = 18;
+} else if (PixelRatio.get() === 2) {
+  defaultIconTextSize = 16;
+} else if (PixelRatio.get() < 2) {
+  defaultIconTextSize = 14;
+}
 
 const ImgPicker = props => {
   const [pickedImage, setPickedImage] = useState("");
@@ -40,9 +54,9 @@ const ImgPicker = props => {
     }
     const photo = await ImagePicker.launchCameraAsync({
       // allowsEditing: true,
-      quality: 0.8
+      quality: 0.7
     });
-
+    // console.log(photo)
     setPickedImage(photo.uri);
 
     props.onImageTaken(photo.uri);
@@ -54,19 +68,20 @@ const ImgPicker = props => {
       return;
     }
     const image = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: "photo",
       quality: 0.7
     });
+
     setPickedImage(image.uri);
 
     props.onImageTaken(image.uri);
   };
 
-  const { selectedImage} = props
+  const { selectedImage } = props;
 
-  useEffect(()=>{
-    setPickedImage(selectedImage)
-  }, [selectedImage])
+  useEffect(() => {
+    setPickedImage(selectedImage);
+  }, [selectedImage]);
 
   let TouchableCmp = TouchableOpacity;
 
@@ -77,9 +92,24 @@ const ImgPicker = props => {
     <View>
       {!pickedImage ? (
         <View style={styles.imageArea}>
-          <DefaultText style={{ fontSize: 18 }}>
-            등록된 이미지가 없습니다.
-          </DefaultText>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={takeImageHandler}
+            >
+              <Icon name="ios-images" size={defaultIconSize*2/3} color="white" />
+            </TouchableOpacity>
+            <DefaultText style={styles.iconText}>앨범</DefaultText>
+          </View>
+          <View style={{ alignItems: "center" }}>
+            <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={takePhotoHandler}
+            >
+              <Icon name="ios-camera" size={defaultIconSize*2/3} color="white" />
+            </TouchableOpacity>
+            <DefaultText style={styles.iconText}>카메라</DefaultText>
+          </View>
         </View>
       ) : (
         <View style={{ ...styles.imageArea, ...{ borderColor: "white" } }}>
@@ -90,23 +120,6 @@ const ImgPicker = props => {
           </View>
         </View>
       )}
-
-      <View style={styles.buttons}>
-        <View style={{ width: "40%" }}>
-          <Button
-            title="사진"
-            color={Colors.mainColor}
-            onPress={takeImageHandler}
-          />
-        </View>
-        <View style={{ width: "40%" }}>
-          <Button
-            title="카메라"
-            color={Colors.mainColor}
-            onPress={takePhotoHandler}
-          />
-        </View>
-      </View>
     </View>
   );
 };
@@ -114,12 +127,31 @@ const ImgPicker = props => {
 const styles = StyleSheet.create({
   imageArea: {
     height: Dimensions.get("window").height * 0.35,
+    marginVertical: 15,
     paddingTop: 10,
     paddingBottom: 20,
     borderColor: "#ccc",
     borderWidth: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "space-around",
+    flexDirection: "row"
+  },
+  buttonContainer: {
+    alignItems: "center"
+  },
+  iconContainer: {
+    height: defaultIconSize,
+    width: defaultIconSize,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: (defaultIconSize * 1.5) / 2,
+    backgroundColor: Colors.blueColor,
+    marginTop:Dimensions.get('window').height*0.039,
+    marginBottom:Dimensions.get('window').height*0.013
+  },
+  iconText: {
+    fontSize: defaultIconTextSize,
+    color: Colors.mainColor,
   },
   image: {
     height: "100%",
