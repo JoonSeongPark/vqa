@@ -68,7 +68,7 @@ const ImgPicker = props => {
       return;
     }
     const image = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: "photo",
+  
       quality: 0.7
     });
 
