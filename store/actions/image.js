@@ -4,14 +4,13 @@ import Images from "../../models/images";
 
 export const fetchImages = () => {
   return async dispatch => {
-    const response = await fetch("http://35.229.162.86:5000/get_images");
+    const response = await fetch("http://34.80.51.170:5000/get_images").catch(err => {console.error(err)});
     const responseJson = await response.json()
-    const images = await responseJson.images;
     const loadedImages = [];
 
-    for (const key in images) {
+    for (const key in responseJson) {
       loadedImages.push(
-        new Images(images[key].imageId, 'http://35.229.162.86:5000/get_image?image_url='+images[key].imageUrl)
+        new Images(responseJson[key].imageId, 'http://34.80.51.170:5000/get_image?image_url='+responseJson[key].imageUrl)
       );
     }
     dispatch({ type: SET_IMAGES, images: loadedImages });
