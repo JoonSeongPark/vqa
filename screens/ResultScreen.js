@@ -59,7 +59,7 @@ const ResultScreen = props => {
       type: "image/jpeg",
       name: "photo.jpg"
     });
-    file.append("question", question);
+    file.append("question", question.toLowerCase().replace(/\?/g,''));
 
     fetch("http://34.80.51.170:5000/upload", {
       method: "POST",
