@@ -28,7 +28,7 @@ const VqaNaviator = createStackNavigator(
     transitionConfig: () => fromRight(),
     defaultNavigationOptions: {
       headerStyle: {
-        elevation: 0,
+        elevation: 1,
         backgroundColor: Platform.OS === "android" ? Colors.mainColor : "white"
       },
       headerTintColor: Platform.OS === "android" ? "white" : Colors.mainColor
