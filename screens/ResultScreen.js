@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
-  Text,
   TextInput,
   Image,
   StyleSheet,
@@ -9,31 +8,32 @@ import {
   Dimensions,
   Button,
   KeyboardAvoidingView,
-  Alert,
-  PixelRatio
+  PixelRatio,
+  ActivityIndicator
 } from "react-native";
-import { useSelector } from "react-redux";
+
 import DefaultText from "../components/DefaultText";
 
 import Colors from "../constants/Colors";
 import Splitter from "../components/Splitter";
 import AnswerList from "../components/AnswerList";
 import Credits from "../components/Credits";
+import ScreenTopPart from "../components/ScreenTopPart";
 
-var defaultHeaderFontSize = 28;
+var defaultHeaderFontSize = 24;
 var defaultTitleFontSize = 30;
 var defaultExplainFontSize = 16;
 
 if (PixelRatio.get() === 3) {
-  defaultHeaderFontSize = 25;
+  defaultHeaderFontSize = 22;
   defaultTitleFontSize = 26;
   defaultExplainFontSize = 14;
 } else if (PixelRatio.get() === 2) {
-  defaultHeaderFontSize = 22;
+  defaultHeaderFontSize = 20;
   defaultTitleFontSize = 22;
   defaultExplainFontSize = 12;
 } else if (PixelRatio.get() < 2) {
-  defaultHeaderFontSize = 19;
+  defaultHeaderFontSize = 18;
   defaultTitleFontSize = 18;
   defaultExplainFontSize = 10;
 }
@@ -42,6 +42,8 @@ const ResultScreen = props => {
   const [question, setQuestion] = useState("");
   const [apiResult, setApiResult] = useState([]);
   const [haveResult, setHaveResult] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   const questionInputHandler = inputText => {
     setQuestion(inputText);
   };
@@ -57,52 +59,25 @@ const ResultScreen = props => {
       type: "image/jpeg",
       name: "photo.jpg"
     });
-    if (question === "") {
-      setQuestion("What is this?");
-    }
     file.append("question", question);
 
-    fetch("http://35.229.162.86:5000/upload", {
+    fetch("http://34.80.51.170:5000/upload", {
       method: "POST",
       body: file
     })
       .then(response => response.json())
       .then(responseJson => {
+        setLoading(true);
         setApiResult(responseJson);
         setHaveResult(true);
+        setTimeout(() => {
+          setLoading(false);
+        }, 2500);
       })
       .catch(error => {
         console.error(error);
       });
   };
-
-  // const loadedSamples = [];
-
-  // useEffect(() => {
-  //   fetch("http://35.229.162.86:5000/get_image_pathes")
-  //     .then(response => response.json())
-  //     .then(responseJson => {
-  //       return responseJson.image_pathes;
-  //     })
-  //     .then(samples => {
-  //       setSampleList(samples);
-  //       setLoading(false);
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //     });
-  // }, []);
-
-  // if (loading) {
-  // } else {
-  //   for (const key in sampleList) {
-  //     loadedSamples.push(
-  //       new Images(new Date().toString() + key, sampleList[key])
-  //     );
-  //   }
-  //   dispatch(sampleActions.addSamples(loadedSamples.id, loadedSamples.imageUrl))
-  //   console.log(loadedSamples);
-  // }
 
   return (
     <KeyboardAvoidingView
@@ -112,15 +87,7 @@ const ResultScreen = props => {
     >
       <ScrollView style={{ flex: 1 }}>
         <View style={{ paddingHorizontal: 15 }}>
-          <View style={styles.header}>
-            <Image
-              style={styles.logoImage}
-              source={require("../assets/images/vqa_title_blue.png")}
-            />
-            <DefaultText style={styles.headExplanation}>
-              : 이미지에 대해 자연어로 묻고, 답을 얻어내는 모델
-            </DefaultText>
-          </View>
+          <ScreenTopPart />
 
           <Splitter />
 
@@ -153,18 +120,23 @@ const ResultScreen = props => {
               />
               <Button
                 title="Submit"
-                style={{ fontSize: 10 }}
-                color={Colors.mainColor}
+                style={{ fontSize: 10, color: Colors.mainColor }}
+                color={Colors.blueColor}
                 onPress={apiPostHandler}
               />
             </View>
           </View>
           {haveResult && <Splitter />}
-          {haveResult && (
+          {haveResult && loading && (
+            <View style={styles.actIndicator}>
+              <ActivityIndicator size="large" color={Colors.blueColor} />
+            </View>
+          )}
+          {haveResult && !loading && (
             <View style={styles.answerPart}>
               <DefaultText style={styles.partTitle}>Answer</DefaultText>
               <DefaultText style={styles.partExplanation}>
-                : VQA 결과입니다.
+                : 예측된 결과의 정답과 신뢰도입니다. (Top 5)
               </DefaultText>
               <View style={styles.answerContainer}>
                 <AnswerList result={apiResult} />
@@ -175,7 +147,6 @@ const ResultScreen = props => {
           <Splitter />
 
           <Credits />
-          
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -184,10 +155,19 @@ const ResultScreen = props => {
 
 ResultScreen.navigationOptions = naviData => {
   return {
-    headerTitle: <Text style={styles.topHeader}>VQA Result</Text>
+    headerTitle: (
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <DefaultText style={styles.topHeader}>VQA Result</DefaultText>
+      </View>
+    )
   };
 };
 const styles = StyleSheet.create({
+  headerLogo: {
+    height: Dimensions.get("window").height * 0.03,
+    width: Dimensions.get("window").width * 0.15,
+    resizeMode: "contain"
+  },
   topHeader: {
     color: Platform.OS === "android" ? "white" : Colors.mainColor,
     fontSize: defaultHeaderFontSize,
@@ -209,7 +189,7 @@ const styles = StyleSheet.create({
   },
   partTitle: {
     paddingHorizontal: 10,
-    fontSize: defaultTitleFontSize,
+    fontSize: defaultTitleFontSize
   },
   partExplanation: {
     paddingHorizontal: 15,
@@ -241,6 +221,14 @@ const styles = StyleSheet.create({
   },
   answerContainer: {
     marginHorizontal: 5
+  },
+  actIndicator: {
+    margin: 5,
+    width: "100%",
+    height: undefined,
+    aspectRatio: 1 / 0.2,
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 

@@ -1,12 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Dimensions,
-  PixelRatio
-} from "react-native";
+import { View, StyleSheet, Image, Dimensions, PixelRatio } from "react-native";
 
 import { useDispatch } from "react-redux";
 
@@ -44,7 +37,7 @@ const OpeningScreen = props => {
         <View style={styles.imageContainer}>
           <Image
             style={styles.image}
-            source={require("../assets/images/vqa_logo_white.png")}
+            source={require("../assets/images/vqa_logo_image.png")}
           />
         </View>
       </View>
@@ -76,12 +69,14 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: Dimensions.get("window").width * 0.7,
     height: Dimensions.get("window").height * 0.2,
-    marginTop: 90
+    marginTop: 40,
+    alignItems: "center"
   },
   image: {
     width: "100%",
     height: "100%",
-    resizeMode: "contain"
+    resizeMode: "contain",
+    marginBottom: 40
   },
   bottomText: {
     fontSize: defaultFontSize,

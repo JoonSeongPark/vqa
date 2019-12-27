@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   ScrollView,
-  Image,
   StyleSheet,
   ActivityIndicator,
   Platform,
-  PixelRatio,
-  Dimensions
+  PixelRatio
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -15,14 +13,14 @@ import Icon from "react-native-vector-icons/Ionicons";
 import DefaultText from "../components/DefaultText";
 import Colors from "../constants/Colors";
 import ImgPicker from "../components/ImgPicker";
+import ScreenTopPart from "../components/ScreenTopPart";
 
 import SampleImages from "../components/SampleImages";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Splitter from "../components/Splitter";
 import Credits from "../components/Credits";
 
-import * as imageActions from '../store/actions/image'
-import * as photoActions from "../store/actions/photo";
+import * as imageActions from "../store/actions/image";
 
 var defaultHeaderFontSize = 24;
 var defaultTitleFontSize = 30;
@@ -57,50 +55,30 @@ const HomeScreen = props => {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 2500);
+    }, 2000);
   }, [setTimeout, setLoading]);
 
   const dispatch = useDispatch();
 
   const imageTakenHandler = imagePath => {
     setSelectedImage(imagePath);
-    dispatch(photoActions.addImage(selectedImage));
-
   };
 
   const sampleRefreshHandler = () => {
     dispatch(imageActions.fetchImages());
-    setLoading(true)
+    setLoading(true);
     setTimeout(() => {
       setLoading(false);
     }, 2500);
   };
   const imageResetHandler = () => {
     setSelectedImage("");
-    dispatch(photoActions.addImage(selectedImage));
   };
 
   return (
     <ScrollView>
       <View style={styles.screen}>
-        <View style={styles.header}>
-          <Image
-            style={styles.logoImage}
-            source={require("../assets/images/vqa_logo_image.png")}
-          />
-          <DefaultText
-            style={{
-              paddingBottom: 10,
-              fontSize: defaultTitleFontSize,
-              color: Colors.blueColor
-            }}
-          >
-            VQA
-          </DefaultText>
-          <DefaultText style={styles.headExplanation}>
-            : 이미지에 대해 자연어로 묻고, 답을 얻어내는 모델
-          </DefaultText>
-        </View>
+        <ScreenTopPart />
 
         <Splitter />
 
@@ -208,21 +186,6 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     paddingHorizontal: 15
-  },
-  header: {
-    alignItems: "center"
-  },
-  logoImage: {
-    height: Dimensions.get("window").height * 0.15,
-    width: Dimensions.get("window").width * 0.75,
-    resizeMode: "contain",
-    marginTop: 15,
-    marginBottom: 5
-  },
-  headExplanation: {
-    fontSize: defaultExplainFontSize,
-    color: "gray"
-    // paddingBottom: Dimensions.get("window").height * 0.002
   },
   sectionTitle: {
     paddingTop: 3,
