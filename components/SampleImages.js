@@ -1,14 +1,48 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import SampleGridTile from "./SampleGridTile";
 
-
-
 const SampleImages = props => {
+  var loopCmpTop = [];
+  var loopCmpBottom = [];
+  var sampleImages = props.sampleImages;
+  for (let i = 0; i < 2; i++) {
+    loopCmpTop.push(
+      <SampleGridTile
+        key={i}
+        image={sampleImages[i].imageUrl}
+        onSelect={() => {
+          props.navigation.navigate({
+            routeName: "Result",
+            params: {
+              imageId: sampleImages[i].id,
+              imageUrl: sampleImages[i].imageUrl
+            }
+          });
+        }}
+      />
+    );
+    loopCmpBottom.push(
+      <SampleGridTile
+      key={i+2}
+        image={sampleImages[i + 2].imageUrl}
+        onSelect={() => {
+          props.navigation.navigate({
+            routeName: "Result",
+            params: {
+              imageId: sampleImages[i + 2].id,
+              imageUrl: sampleImages[i + 2].imageUrl
+            }
+          });
+        }}
+      />
+    );
+  }
   return (
     <View>
       <View style={{ paddingTop: 10, flexDirection: "row" }}>
-        <SampleGridTile
+        {loopCmpTop}
+        {/* <SampleGridTile
           image={props.sampleImages[0].imageUrl}
           onSelect={() => {
             props.navigation.navigate({
@@ -31,10 +65,11 @@ const SampleImages = props => {
               }
             });
           }}
-        />
+        /> */}
       </View>
       <View style={{ paddingBottom: 10, flexDirection: "row" }}>
-        <SampleGridTile
+        {loopCmpBottom}
+        {/* <SampleGridTile
           image={props.sampleImages[2].imageUrl}
           onSelect={() => {
             props.navigation.navigate({
@@ -57,7 +92,7 @@ const SampleImages = props => {
               }
             });
           }}
-        />
+        /> */}
       </View>
     </View>
   );
