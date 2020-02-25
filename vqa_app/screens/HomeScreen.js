@@ -5,7 +5,8 @@ import {
   StyleSheet,
   ActivityIndicator,
   Platform,
-  PixelRatio
+  PixelRatio,
+  TouchableOpacity
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -16,7 +17,6 @@ import ImgPicker from "../components/ImgPicker";
 import ScreenTopPart from "../components/ScreenTopPart";
 
 import SampleImages from "../components/SampleImages";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import Splitter from "../components/Splitter";
 import Credits from "../components/Credits";
 

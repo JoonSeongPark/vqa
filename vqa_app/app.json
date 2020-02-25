@@ -28,8 +28,8 @@
       "bundleIdentifier": "com.ybigta20192.vqa"
     },
     "android": {
-      
       "package": "com.ybigta20192.vqa"
-    }
+    },
+    "backgroundColor": "#3b3838"
   }
 }

@@ -6,7 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
-  Button,
+  Platform,
   KeyboardAvoidingView,
   PixelRatio,
   ActivityIndicator
@@ -19,23 +19,28 @@ import Splitter from "../components/Splitter";
 import AnswerList from "../components/AnswerList";
 import Credits from "../components/Credits";
 import ScreenTopPart from "../components/ScreenTopPart";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 var defaultHeaderFontSize = 24;
 var defaultTitleFontSize = 30;
 var defaultExplainFontSize = 16;
+var defaultSubmitFontSize = 17;
 
 if (PixelRatio.get() === 3) {
   defaultHeaderFontSize = 22;
   defaultTitleFontSize = 26;
   defaultExplainFontSize = 14;
+  defaultSubmitFontSize = 16;
 } else if (PixelRatio.get() === 2) {
   defaultHeaderFontSize = 20;
   defaultTitleFontSize = 22;
   defaultExplainFontSize = 12;
+  defaultSubmitFontSize = 15;
 } else if (PixelRatio.get() < 2) {
   defaultHeaderFontSize = 18;
   defaultTitleFontSize = 18;
   defaultExplainFontSize = 10;
+  defaultSubmitFontSize = 14;
 }
 
 const ResultScreen = props => {
@@ -53,23 +58,23 @@ const ResultScreen = props => {
   const currentImage = { id: imageId, imageUrl: imageUrl };
 
   const apiPostHandler = () => {
+    setHaveResult(true);
+    setLoading(true);
     const file = new FormData();
     file.append("photo", {
       uri: imageUrl,
       type: "image/jpeg",
       name: "photo.jpg"
     });
-    file.append("question", question.toLowerCase().replace(/\?/g,''));
+    file.append("question", question.toLowerCase().replace(/\?/g, ""));
 
-    fetch("http://34.80.51.170:5000/upload", {
+    fetch("http://35.213.157.162:5000/upload", {
       method: "POST",
       body: file
     })
       .then(response => response.json())
       .then(responseJson => {
-        setLoading(true);
         setApiResult(responseJson);
-        setHaveResult(true);
         setTimeout(() => {
           setLoading(false);
         }, 2500);
@@ -118,12 +123,21 @@ const ResultScreen = props => {
                 onChangeText={questionInputHandler}
                 style={styles.input}
               />
-              <Button
-                title="Submit"
-                style={{ fontSize: 10, color: Colors.mainColor }}
-                color={Colors.blueColor}
+              <TouchableOpacity
+                style={styles.submitContainer}
                 onPress={apiPostHandler}
-              />
+              >
+                <DefaultText
+                  style={{
+                    fontSize: defaultSubmitFontSize,
+                    color:
+                      Platform.OS === "android" ? "white" : Colors.blueColor
+                  }}
+                >
+                  SUBMIT
+                </DefaultText>
+              </TouchableOpacity>
+
             </View>
           </View>
           {haveResult && <Splitter />}
@@ -210,14 +224,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 12,
     flexDirection: "row",
-    justifyContent: "space-around"
+    justifyContent: "space-around",
+    alignItems: "center"
   },
   input: {
     paddingHorizontal: 7,
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 5,
-    width: "75%"
+    width: "75%",
+    height: Dimensions.get("window").height * 0.04
+  },
+  submitContainer:{
+    backgroundColor:
+      Platform.OS === "android" ? Colors.blueColor : "white",
+    height: Dimensions.get("window").height * 0.04,
+    width: Dimensions.get('window').width*0.17,
+    justifyContent: 'center',
+    alignItems:'center',
+    borderRadius: 5
   },
   answerContainer: {
     marginHorizontal: 5
