@@ -1,3 +1,4 @@
+.gitignore
 .ipynb_checkpoints
 .DS_Store
 
@@ -5,3 +6,9 @@ models/*
 datasets/**/*
 
 __pycache__
+
+venv/
+
+*.ipynb 
+
+.idea/*

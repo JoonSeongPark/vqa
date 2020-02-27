@@ -9,16 +9,30 @@ from utils import text_helper
 
 class VqaDataset(data.Dataset):
 
-    def __init__(self, input_dir, input_vqa, max_qst_length=30, max_num_ans=10, transform=None):
+    def __init__(self, input_dir, vqa, max_qst_length=30, max_num_ans=10, transform=None):
+        
         self.input_dir = input_dir
-        self.vqa = np.load(input_dir+'/'+input_vqa, allow_pickle=True)
+        self.vqa = vqa
         self.qst_vocab = text_helper.VocabDict(input_dir+'/vocab_questions.txt')
         self.ans_vocab = text_helper.VocabDict(input_dir+'/vocab_answers.txt')
         self.max_qst_length = max_qst_length
         self.max_num_ans = max_num_ans
         self.load_ans = ('valid_answers' in self.vqa[0]) and (self.vqa[0]['valid_answers'] is not None)
         self.transform = transform
-
+        
+    @classmethod
+    def from_file(input_dir, input_vqa, max_qst_length=30, max_num_ans=10, transform=None):
+        
+        vqa = np.load(input_dir+'/'+input_vqa, allow_pickle=True)
+        
+        return cls(input_dir, vqa, max_qst_length=30, max_num_ans=10, transform=None)
+    
+    @classmethod
+    def from_fstream(input_dir, fstream, question_tokens, max_qst_length=30, max_num_ans=10, transform=None):
+        vqa = [{'image_path':image, 'question_tokens':question_tokens}]
+        
+        return cls(input_dir, vqa, max_qst_length=30, max_num_ans=10, transform=None)
+        
     def __getitem__(self, idx):
 
         vqa = self.vqa
