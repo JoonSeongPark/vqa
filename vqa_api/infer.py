@@ -13,13 +13,13 @@ from data_loader import VqaDataset
 
 device = torch.device('cuda')
 
-def infer(model, fstream, question):
+def infer(model, fstream, question_tokens):
     
     transform = {'train': transforms.Compose([transforms.ToTensor(),
                                         transforms.Normalize((0.485, 0.456, 0.406),
                                                              (0.229, 0.224, 0.225))])} 
 
-    dataset = VqaDataset.from_fp(fstream, question)
+    dataset = VqaDataset.from_fstream('./demo', fstream, question_tokens, transform=True)
     
     qst_vocab_size = dataset.qst_vocab.vocab_size
     ans_vocab_size = dataset.ans_vocab.vocab_size
@@ -27,6 +27,7 @@ def infer(model, fstream, question):
     
     batch_sample = next(iter(dataset))
     image = batch_sample['image'].unsqueeze(0).to(device)
+    
     question = torch.from_numpy(batch_sample['question']).unsqueeze(0).to(device)
     
     idx2ans = [line.strip() for line in open('./demo/vocab_answers.txt','r').readlines()]

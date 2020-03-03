@@ -21,17 +21,23 @@ class VqaDataset(data.Dataset):
         self.transform = transform
         
     @classmethod
-    def from_file(input_dir, input_vqa, max_qst_length=30, max_num_ans=10, transform=None):
+    def from_file(cls, input_dir, input_vqa, max_qst_length=30, max_num_ans=10, transform=None):
         
         vqa = np.load(input_dir+'/'+input_vqa, allow_pickle=True)
         
-        return cls(input_dir, vqa, max_qst_length=30, max_num_ans=10, transform=None)
+        return cls(input_dir, vqa, 
+                   max_qst_length=max_qst_length, 
+                   max_num_ans=max_num_ans, 
+                   transform=transform)
     
     @classmethod
-    def from_fstream(input_dir, fstream, question_tokens, max_qst_length=30, max_num_ans=10, transform=None):
-        vqa = [{'image_path':image, 'question_tokens':question_tokens}]
+    def from_fstream(cls, input_dir, fstream, question_tokens, max_qst_length=30, max_num_ans=10, transform=None):
+        vqa = [{'image_path':fstream, 'question_tokens':question_tokens}]
         
-        return cls(input_dir, vqa, max_qst_length=30, max_num_ans=10, transform=None)
+        return cls(input_dir, vqa, 
+                   max_qst_length=max_qst_length, 
+                   max_num_ans=max_num_ans, 
+                   transform=transform)
         
     def __getitem__(self, idx):
 
