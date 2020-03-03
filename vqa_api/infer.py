@@ -19,7 +19,7 @@ def infer(model, fstream, question_tokens):
                                         transforms.Normalize((0.485, 0.456, 0.406),
                                                              (0.229, 0.224, 0.225))])} 
 
-    dataset = VqaDataset.from_fstream('./demo', fstream, question_tokens, transform=True)
+    dataset = VqaDataset.from_fstream('./demo', fstream, question_tokens, transform=transforms.ToTensor())
     
     qst_vocab_size = dataset.qst_vocab.vocab_size
     ans_vocab_size = dataset.ans_vocab.vocab_size
