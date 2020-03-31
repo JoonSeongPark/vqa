@@ -7,3 +7,4 @@
 
 - React Native
 - GCP (GPU)
+- Pytorch
