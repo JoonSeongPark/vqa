@@ -8,3 +8,10 @@
 - React Native
 - GCP (GPU)
 - Pytorch
+
+
+## Reference Paper
+- Akira Fukui, Dong Huk Park, Daylen Yang, Anna Rohrbach, Trevor Darrell, & Marcus Rohrbach (2016). Multimodal Compact Billinear Pooling for Visual Question Answering and Visual Grounding. 
+Paper Link: https://arxiv.org/pdf/1606.01847.pdf
+<br>
+![vqa_model](https://user-images.githubusercontent.com/42436353/78024735-d8a06b00-7393-11ea-8a22-22fa9037db19.PNG)
