@@ -11,7 +11,8 @@
 
 
 ## Reference Paper
-- Akira Fukui, Dong Huk Park, Daylen Yang, Anna Rohrbach, Trevor Darrell, & Marcus Rohrbach (2016). Multimodal Compact Billinear Pooling for Visual Question Answering and Visual Grounding. 
+- Akira Fukui, Dong Huk Park, Daylen Yang, Anna Rohrbach, Trevor Darrell, & Marcus Rohrbach (2016). Multimodal Compact Billinear Pooling for Visual Question Answering and Visual Grounding.
+<br>
 Paper Link: https://arxiv.org/pdf/1606.01847.pdf
 <br><br>
 
