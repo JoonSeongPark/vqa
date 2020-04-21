@@ -68,7 +68,7 @@ const ResultScreen = props => {
     });
     file.append("question", question.toLowerCase().replace(/\?/g, ""));
 
-    fetch("http://35.213.157.162:5000/upload", {
+    fetch("http://34.70.87.117:5000/upload", {
       method: "POST",
       body: file
     })
